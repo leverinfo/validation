@@ -17,7 +17,7 @@ public abstract class ValidationException extends RuntimeException {
     return code;
   }
 
-  protected ValidationMessage getValidationMessage() {
+  public ValidationMessage getValidationMessage() {
     return validationMessage;
   }
 }
