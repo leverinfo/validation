@@ -1,5 +1,7 @@
 # validation
 
+[![Maven Central](https://img.shields.io/maven-central/v/br.com.leverinfo/validation.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22br.com.leverinfo%22%20AND%20a:%22validation%22)
+
 This library helps to handle with validations in Java.
 
 ## Requirements
@@ -14,7 +16,7 @@ To start, add that Maven dependency:
 <dependency>
   <groupId>br.com.leverinfo</groupId>
   <artifactId>validation</artifactId>
-  <version>0.1.0</version>
+  <version>0.2.0</version>
 </dependency>
 ```
 
@@ -101,9 +103,21 @@ Recommended to handle with condition validations
 * `isTrue(boolean)` - Throws `NotAllowedException` if condition is not true
 * `isFalse(boolean)` - Throws `NotAllowedException` if condition is true
 
+## Custom Exceptions 
+
+This library provides some exception classe to handle with some validations situations.
+
+* `RequiredArgumentException` - Recommended to be thrown when some argument value is missing
+* `InvalidArgumentException` - Recommended to be thrown when some argument value is invalid
+* `NotAllowedException` - Recommended to be thrown when some operation is not allowed
+* `NotFoundException` - Recommended to be thrown when some item is not found
+* `DependencyNotFoundException` - Recommended to be thrown when some dependency is not found
+* `DuplicatedException` - Recommended to be thrown when some item is duplicated
+
 ## Roadmap
 
-- Create unit tests
-- Configure CI/CD pipeline
+* Implement custom bean validations
+* Create unit tests
+* Configure CI/CD pipeline
 
 Your contribution is appreciated.

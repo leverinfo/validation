@@ -7,7 +7,7 @@
 
   <groupId>br.com.leverinfo</groupId>
   <artifactId>validation</artifactId>
-  <version>0.1.1</version>
+  <version>0.2.0</version>
   <name>${project.groupId}:${project.artifactId}</name>
   <description>A library to handle with validations.</description>
   <url>https://github.com/leverinfo/validation</url>
