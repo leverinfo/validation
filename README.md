@@ -1,8 +1,6 @@
-# validation
+# validation [![Maven Central](https://img.shields.io/maven-central/v/br.com.leverinfo/validation.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22br.com.leverinfo%22%20AND%20a:%22validation%22)
 
-[![Maven Central](https://img.shields.io/maven-central/v/br.com.leverinfo/validation.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22br.com.leverinfo%22%20AND%20a:%22validation%22)
-
-This library helps to handle with validations in Java.
+This library helps to handle custom validations in Java.
 
 ## Requirements
 
