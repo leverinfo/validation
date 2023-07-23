@@ -1185,7 +1185,8 @@ public final class ArgumentValidations {
    * @param message {@link ValidationMessage}
    * @param <T> Desired type
    */
-  public static <T> void contains(T value, Collection<T> collection, ValidationMessage message) {
+  public static <T> void contains(
+      T value, Collection<? extends T> collection, ValidationMessage message) {
     if (!collection.contains(value)) {
       throw new InvalidArgumentException(message);
     }
@@ -1200,7 +1201,7 @@ public final class ArgumentValidations {
    * @param <T> Desired type
    */
   public static <T> void doesNotContain(
-      T value, Collection<T> collection, ValidationMessage message) {
+      T value, Collection<? extends T> collection, ValidationMessage message) {
     if (collection.contains(value)) {
       throw new InvalidArgumentException(message);
     }
