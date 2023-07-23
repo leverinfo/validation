@@ -14,8 +14,14 @@ To start, add that Maven dependency:
 <dependency>
   <groupId>br.com.leverinfo</groupId>
   <artifactId>validation</artifactId>
-  <version>0.2.0</version>
+  <version>0.3.0</version>
 </dependency>
+```
+
+or Gradle:
+
+```
+implementation 'br.com.leverinfo:validation:0.3.0'
 ```
 
 ...then implement the interface `ValidationMessage` by enum (it can be by a class as well):
@@ -73,32 +79,41 @@ Below are the available validations:
 
 Recommended to handle with argument validations
 
-* `isNotNull(Object)` - Throws `RequiredArgumentException` if value is null
-* `isNotBlank(String)` - Throws `RequiredArgumentException` if value is null or `InvalidArgumentException` if value is blank
-* `anyIsNotBlank(Iterable<String>)` - Throws `InvalidArgumentException` if all values are blank
-* `onlyOneIsNotNull(Iterable<Object>)` - Throws `InvalidArgumentException` if more than one value is not null or if all values are null
+* `isNull(<T>)` - Throws `InvalidArgumentException` if value is not null
+* `isNotNull(<T>)` - Throws `RequiredArgumentException` if value is null
+* `isBlank(CharSequence)` - Throws `RequiredArgumentException` if value is null or `InvalidArgumentException` if value is not blank
+* `isNotBlank(CharSequence)` - Throws `RequiredArgumentException` if value is null or `InvalidArgumentException` if value is blank
+* `anyIsNotNull(Iterable<T>)` - Throws `InvalidArgumentException` if all values are null
+* `anyIsNotBlank(Iterable<CharSequence>)` - Throws `InvalidArgumentException` if all values are null or blank
+* `onlyOneIsNotNull(Iterable<T>)` - Throws `InvalidArgumentException` if more than one value is not null or if all values are null
 * `onlyOneIsNotBlank(Iterable<CharSequence>)` - Throws `InvalidArgumentException` if more than one value is not blank or if all values are blank
-* `isNotEmpty(Map | Collection)` - Throws `RequiredArgumentException` if value is null or `InvalidArgumentException` if value is empty
-* `isGreaterThanZero(int | long | BigDecimal)` - Throws `RequiredArgumentException` if value is null or `InvalidArgumentException` if value is less than or equal to zero
-* `isGreaterThan(int | long | BigDecimal)` - Throws `InvalidArgumentException` if value is less than or equal to other value
-* `isGreaterThanOrEqualToZero(int | long | BigDecimal)` - Throws `InvalidArgumentException` if value is less than zero
-* `isGreaterThanOrEqualTo(int | long | BigDecimal)` - Throws `InvalidArgumentException` if value is less than other value
-* `isNotEqualToZero(int | long | BigDecimal)` - Throws `InvalidArgumentException` if value is equal to zero
-* `isBetween(int | long | BigDecimal)` - Throws `InvalidArgumentException` if value is not between limits
-* `isEqualTo(Object)` - Throws `InvalidArgumentException` if value is not equal to other value
-* `isNotEqualTo(Object)` - Throws `InvalidArgumentException` if value is equal to other value
-* `isTrue(boolean)` - Throws `InvalidArgumentException` if condition is not true
+* `isEmpty(Map<K, V> | Collection<T>)` - Throws `RequiredArgumentException` if value is null or `InvalidArgumentException` if value is not empty
+* `isNotEmpty(Map<K, V> | Collection<T>)` - Throws `RequiredArgumentException` if value is null or `InvalidArgumentException` if value is empty
+* `isEqualTo(<T>)` - Throws `InvalidArgumentException` if value is not equal to other value
+* `isNotEqualTo(<T>)` - Throws `InvalidArgumentException` if value is equal to other value
+* `isNotEqualToZero(byte | short | int | long | float | double | BigDecimal)` - Throws `InvalidArgumentException` if value is equal to zero
+* `isLessThan(byte | short | int | long | float | double | Comparable<T>)` - Throws `InvalidArgumentException` if value is greater than or equal to other value
+* `isLessThanZero(byte | short | int | long | float | double | BigDecimal)` - Throws `InvalidArgumentException` if value is greater than or equal to zero
+* `isLessThanOrEqualTo(byte | short | int | long | float | double | Comparable<T>)` - Throws `InvalidArgumentException` if value is greater than other value
+* `isGreaterThanOrEqualToZero(byte | short | int | long | float | double | BigDecimal)` - Throws `InvalidArgumentException` if value is greater than zero
+* `isGreaterThan(byte | short | int | long | float | double | Comparable<T>)` - Throws `InvalidArgumentException` if value is less than or equal to other value
+* `isGreaterThanZero(byte | short | int | long | float | double | BigDecimal)` - Throws `InvalidArgumentException` if value is less than or equal to zero
+* `isGreaterThanOrEqualTo(byte | short | int | long | float | double | Comparable<T>)` - Throws `InvalidArgumentException` if value is less than other value
+* `isGreaterThanOrEqualToZero(byte | short | int | long | float | double | BigDecimal)` - Throws `InvalidArgumentException` if value is less than zero
+* `isBetween(byte | short | int | long | float | double | BigDecimal)` - Throws `InvalidArgumentException` if value is not between limits
+* `isTrue(boolean)` - Throws `InvalidArgumentException` if condition is false
 * `isFalse(boolean)` - Throws `InvalidArgumentException` if condition is true
 * `matchesPattern(CharSequence)` - Throws `InvalidArgumentException` if value does not match with pattern
-* `contains(Object)` - Throws `InvalidArgumentException` if collection does not contain value
-* `hasSize(CharSequence | Collection)` - Throws `InvalidArgumentException` if value has not desired size
-* `hasSizeBetween(CharSequence | Collection)` - Throws `InvalidArgumentException` if value has not desired size range
+* `contains(Collection<T>)` - Throws `InvalidArgumentException` if collection does not contain value
+* `doesNotContain(Collection<T>)` - Throws `InvalidArgumentException` if collection contains value
+* `hasSize(CharSequence | Map<K, V> | Collection<T>)` - Throws `InvalidArgumentException` if value has not desired size
+* `hasSizeBetween(CharSequence | Map<K, V> | Collection<T>)` - Throws `InvalidArgumentException` if value has not desired size range
 
 ### ConditionValidations
 
 Recommended to handle with condition validations
 
-* `isTrue(boolean)` - Throws `NotAllowedException` if condition is not true
+* `isTrue(boolean)` - Throws `NotAllowedException` if condition is false
 * `isFalse(boolean)` - Throws `NotAllowedException` if condition is true
 
 ## Custom Exceptions 
@@ -115,7 +130,6 @@ This library provides some exception classe to handle with some validations situ
 ## Roadmap
 
 * Implement custom bean validations
-* Create unit tests
 * Configure CI/CD pipeline
 
 Your contribution is appreciated.
