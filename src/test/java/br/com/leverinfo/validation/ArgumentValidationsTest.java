@@ -1999,6 +1999,29 @@ class ArgumentValidationsTest {
         .withValidationMessage(Validations.ANY_VALIDATION);
   }
 
+  @Test
+  void testIsInstanceOf_Success() {
+    String anyString = "Any string";
+
+    assertThatCode(
+            () ->
+                ArgumentValidations.isInstanceOf(
+                    anyString, CharSequence.class, Validations.ANY_VALIDATION))
+        .doesNotThrowAnyException();
+  }
+
+  @Test
+  void testIsInstanceOf_Error() {
+    String anyString = "Any string";
+
+    assertThatInvalidArgumentException()
+        .isThrownBy(
+            () ->
+                ArgumentValidations.isInstanceOf(
+                    anyString, Integer.class, Validations.ANY_VALIDATION))
+        .withValidationMessage(Validations.ANY_VALIDATION);
+  }
+
   private enum Validations implements ValidationMessage {
     ANY_VALIDATION("0", "Any validation message");
 

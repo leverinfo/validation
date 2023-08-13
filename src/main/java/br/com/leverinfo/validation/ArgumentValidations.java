@@ -23,7 +23,7 @@ public final class ArgumentValidations {
    *
    * @param value Desired value
    * @param message {@link ValidationMessage}
-   * @param <T> Desired type
+   * @param <T> Value type
    */
   public static <T> void isNull(T value, ValidationMessage message) {
     if (Objects.nonNull(value)) {
@@ -36,7 +36,7 @@ public final class ArgumentValidations {
    *
    * @param value Desired value
    * @param message {@link ValidationMessage}
-   * @param <T> Desired type
+   * @param <T> Value type
    */
   public static <T> void isNotNull(T value, ValidationMessage message) {
     if (Objects.isNull(value)) {
@@ -222,7 +222,7 @@ public final class ArgumentValidations {
    * @param value Desired value
    * @param other Value to compare
    * @param message {@link ValidationMessage}
-   * @param <T> Desired type
+   * @param <T> Value type
    */
   public static <T> void isEqualTo(T value, T other, ValidationMessage message) {
     if (!Objects.equals(value, other)) {
@@ -236,7 +236,7 @@ public final class ArgumentValidations {
    * @param value Desired value
    * @param other Value to compare
    * @param message {@link ValidationMessage}
-   * @param <T> Desired type
+   * @param <T> Value type
    */
   public static <T> void isNotEqualTo(T value, T other, ValidationMessage message) {
     if (Objects.equals(value, other)) {
@@ -1183,7 +1183,7 @@ public final class ArgumentValidations {
    * @param value Desired value
    * @param collection Collection to validate
    * @param message {@link ValidationMessage}
-   * @param <T> Desired type
+   * @param <T> Value type
    */
   public static <T> void contains(
       T value, Collection<? extends T> collection, ValidationMessage message) {
@@ -1198,7 +1198,7 @@ public final class ArgumentValidations {
    * @param value Desired value
    * @param collection Collection to validate
    * @param message {@link ValidationMessage}
-   * @param <T> Desired type
+   * @param <T> Value type
    */
   public static <T> void doesNotContain(
       T value, Collection<? extends T> collection, ValidationMessage message) {
@@ -1293,6 +1293,20 @@ public final class ArgumentValidations {
   public static <T> void hasSizeBetween(
       Collection<T> value, int minSize, int maxSize, ValidationMessage message) {
     if (value.size() < minSize || value.size() > maxSize) {
+      throw new InvalidArgumentException(message);
+    }
+  }
+
+  /**
+   * Throws {@link InvalidArgumentException} if value is not of desired type
+   *
+   * @param value Desired value
+   * @param type Desired type
+   * @param message {@link ValidationMessage}
+   * @param <T> Value type
+   */
+  public static <T> void isInstanceOf(T value, Class<?> type, ValidationMessage message) {
+    if (!type.isInstance(value)) {
       throw new InvalidArgumentException(message);
     }
   }

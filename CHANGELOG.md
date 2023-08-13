@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.2
+
+### Improvements
+
+* Add `isInstanceOf` validation
+
 ## 0.3.1
 
 ### Bug fixex

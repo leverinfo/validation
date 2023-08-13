@@ -14,14 +14,14 @@ To start, add that Maven dependency:
 <dependency>
   <groupId>br.com.leverinfo</groupId>
   <artifactId>validation</artifactId>
-  <version>0.3.0</version>
+  <version>0.3.2</version>
 </dependency>
 ```
 
 or Gradle:
 
 ```
-implementation 'br.com.leverinfo:validation:0.3.0'
+implementation 'br.com.leverinfo:validation:0.3.2'
 ```
 
 ...then implement the interface `ValidationMessage` by enum (it can be by a class as well):
@@ -108,6 +108,7 @@ Recommended to handle with argument validations
 * `doesNotContain(Collection<T>)` - Throws `InvalidArgumentException` if collection contains value
 * `hasSize(CharSequence | Map<K, V> | Collection<T>)` - Throws `InvalidArgumentException` if value has not desired size
 * `hasSizeBetween(CharSequence | Map<K, V> | Collection<T>)` - Throws `InvalidArgumentException` if value has not desired size range
+* `isInstanceOf(<T>)` - Throws `InvalidArgumentException` if value is not instance of type
 
 ### ConditionValidations
 
