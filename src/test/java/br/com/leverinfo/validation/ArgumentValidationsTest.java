@@ -1,9 +1,11 @@
 package br.com.leverinfo.validation;
 
-import static br.com.leverinfo.test.ValidationAssertions.assertThatInvalidArgumentException;
-import static br.com.leverinfo.test.ValidationAssertions.assertThatRequiredArgumentException;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.catchThrowableOfType;
 
+import br.com.leverinfo.validation.exception.InvalidArgumentException;
+import br.com.leverinfo.validation.exception.RequiredArgumentException;
 import java.math.BigDecimal;
 import java.util.*;
 import org.junit.jupiter.api.Test;
@@ -18,9 +20,14 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsNull_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isNull(new Object(), Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    Object value = new Object();
+    InvalidArgumentException invalidArgumentException =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isNull(value, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentException.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
   }
 
   @Test
@@ -31,9 +38,13 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsNotNull_Error() {
-    assertThatRequiredArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isNotNull(null, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    RequiredArgumentException requiredArgumentException =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isNotNull(null, Validations.ANY_VALIDATION),
+            RequiredArgumentException.class);
+
+    assertThat(requiredArgumentException.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
   }
 
   @Test
@@ -44,13 +55,21 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsBlank_Error() {
-    assertThatRequiredArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isBlank(null, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    RequiredArgumentException requiredArgumentException =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isBlank(null, Validations.ANY_VALIDATION),
+            RequiredArgumentException.class);
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isBlank("Any string", Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    assertThat(requiredArgumentException.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+
+    InvalidArgumentException invalidArgumentException =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isBlank("Any string", Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentException.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
   }
 
   @Test
@@ -61,13 +80,21 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsNotBlank_Error() {
-    assertThatRequiredArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isNotBlank(null, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    RequiredArgumentException requiredArgumentException =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isNotBlank(null, Validations.ANY_VALIDATION),
+            RequiredArgumentException.class);
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isNotBlank("", Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    assertThat(requiredArgumentException.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+
+    InvalidArgumentException invalidArgumentException =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isNotBlank("", Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentException.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
   }
 
   @Test
@@ -88,9 +115,13 @@ class ArgumentValidationsTest {
     objects.add(null);
     objects.add(null);
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.anyIsNotNull(objects, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentException =
+        catchThrowableOfType(
+            () -> ArgumentValidations.anyIsNotNull(objects, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentException.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
   }
 
   @Test
@@ -112,20 +143,26 @@ class ArgumentValidationsTest {
     nullStrings.add(null);
     nullStrings.add(null);
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(
-            () -> ArgumentValidations.anyIsNotBlank(nullStrings, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentExceptionForNull =
+        catchThrowableOfType(
+            () -> ArgumentValidations.anyIsNotBlank(nullStrings, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentExceptionForNull.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
 
     final List<CharSequence> blankStrings = new ArrayList<>();
     blankStrings.add("");
     blankStrings.add("");
     blankStrings.add("");
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(
-            () -> ArgumentValidations.anyIsNotBlank(blankStrings, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentExceptionForBlank =
+        catchThrowableOfType(
+            () -> ArgumentValidations.anyIsNotBlank(blankStrings, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentExceptionForBlank.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
   }
 
   @Test
@@ -146,22 +183,28 @@ class ArgumentValidationsTest {
     moreThanOneNotNullObjects.add(new Object());
     moreThanOneNotNullObjects.add(null);
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(
+    InvalidArgumentException invalidArgumentExceptionMoreThanOneNotNull =
+        catchThrowableOfType(
             () ->
                 ArgumentValidations.onlyOneIsNotNull(
-                    moreThanOneNotNullObjects, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+                    moreThanOneNotNullObjects, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentExceptionMoreThanOneNotNull.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
 
     final Set<Object> allNullObjects = new HashSet<>();
     allNullObjects.add(null);
     allNullObjects.add(null);
     allNullObjects.add(null);
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(
-            () -> ArgumentValidations.onlyOneIsNotNull(allNullObjects, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentExceptionAllNull =
+        catchThrowableOfType(
+            () -> ArgumentValidations.onlyOneIsNotNull(allNullObjects, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentExceptionAllNull.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
   }
 
   @Test
@@ -183,23 +226,30 @@ class ArgumentValidationsTest {
     moreThanOneNotBlankStrings.add("");
     moreThanOneNotBlankStrings.add(null);
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(
+    InvalidArgumentException invalidArgumentExceptionMoreThanOneNotBlank =
+        catchThrowableOfType(
             () ->
                 ArgumentValidations.onlyOneIsNotBlank(
-                    moreThanOneNotBlankStrings, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+                    moreThanOneNotBlankStrings, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
 
-    final Set<CharSequence> allBlankStrings = new HashSet<>();
-    allBlankStrings.add("");
-    allBlankStrings.add(null);
-    allBlankStrings.add(null);
+    assertThat(invalidArgumentExceptionMoreThanOneNotBlank.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(
+    final Set<CharSequence> allBlankOrNullStrings = new HashSet<>();
+    allBlankOrNullStrings.add("");
+    allBlankOrNullStrings.add(null);
+    allBlankOrNullStrings.add(null);
+
+    InvalidArgumentException invalidArgumentExceptionAllBlankOrNull =
+        catchThrowableOfType(
             () ->
-                ArgumentValidations.onlyOneIsNotBlank(allBlankStrings, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+                ArgumentValidations.onlyOneIsNotBlank(
+                    allBlankOrNullStrings, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentExceptionAllBlankOrNull.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
   }
 
   @Test
@@ -210,16 +260,24 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsEmpty_Map_Error() {
-    assertThatRequiredArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isEmpty((Map<?, ?>) null, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    RequiredArgumentException requiredArgumentException =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isEmpty((Map<?, ?>) null, Validations.ANY_VALIDATION),
+            RequiredArgumentException.class);
+
+    assertThat(requiredArgumentException.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
 
     Map<String, String> map = new HashMap<>();
     map.put("Key", "Value");
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isEmpty(map, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentException =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isEmpty(map, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentException.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
   }
 
   @Test
@@ -231,17 +289,24 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsEmpty_Collection_Error() {
-    assertThatRequiredArgumentException()
-        .isThrownBy(
-            () -> ArgumentValidations.isEmpty((Collection<?>) null, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    RequiredArgumentException requiredArgumentException =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isEmpty((Collection<?>) null, Validations.ANY_VALIDATION),
+            RequiredArgumentException.class);
+
+    assertThat(requiredArgumentException.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
 
     Collection<String> collection = new ArrayList<>();
     collection.add("Any string");
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isEmpty(collection, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentException =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isEmpty(collection, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentException.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
   }
 
   @Test
@@ -255,15 +320,22 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsNotEmpty_Map_Error() {
-    assertThatRequiredArgumentException()
-        .isThrownBy(
-            () -> ArgumentValidations.isNotEmpty((Map<?, ?>) null, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    RequiredArgumentException requiredArgumentException =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isNotEmpty((Map<?, ?>) null, Validations.ANY_VALIDATION),
+            RequiredArgumentException.class);
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(
-            () -> ArgumentValidations.isNotEmpty(new HashMap<>(), Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    assertThat(requiredArgumentException.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+
+    HashMap<Object, Object> value = new HashMap<>();
+    InvalidArgumentException invalidArgumentException =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isNotEmpty(value, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentException.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
   }
 
   @Test
@@ -277,15 +349,22 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsNotEmpty_Collection_Error() {
-    assertThatRequiredArgumentException()
-        .isThrownBy(
-            () -> ArgumentValidations.isNotEmpty((Collection<?>) null, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    RequiredArgumentException requiredArgumentException =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isNotEmpty((Collection<?>) null, Validations.ANY_VALIDATION),
+            RequiredArgumentException.class);
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(
-            () -> ArgumentValidations.isNotEmpty(new ArrayList<>(), Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    assertThat(requiredArgumentException.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+
+    ArrayList<Object> value = new ArrayList<>();
+    InvalidArgumentException invalidArgumentException =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isNotEmpty(value, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentException.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
   }
 
   @Test
@@ -303,10 +382,14 @@ class ArgumentValidationsTest {
     String string1 = "Any string";
     String string2 = "Another string";
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(
-            () -> ArgumentValidations.isEqualTo(string1, string2, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentException =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isEqualTo(string1, string2, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentException.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentException.getParams()).isEqualTo(new String[] {string1, string2});
   }
 
   @Test
@@ -324,10 +407,14 @@ class ArgumentValidationsTest {
     String string1 = "Any string";
     String string2 = "Any string";
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(
-            () -> ArgumentValidations.isNotEqualTo(string1, string2, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentException =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isNotEqualTo(string1, string2, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentException.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentException.getParams()).isEqualTo(new String[] {string1, string2});
   }
 
   @Test
@@ -342,10 +429,14 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsNotEqualToZero_Byte_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(
-            () -> ArgumentValidations.isNotEqualToZero((byte) 0, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentException =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isNotEqualToZero((byte) 0, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentException.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentException.getParams()).isEqualTo(new Object[] {(byte) 0});
   }
 
   @Test
@@ -361,10 +452,14 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsNotEqualToZero_Short_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(
-            () -> ArgumentValidations.isNotEqualToZero((short) 0, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentException =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isNotEqualToZero((short) 0, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentException.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentException.getParams()).isEqualTo(new Object[] {(short) 0});
   }
 
   @Test
@@ -378,9 +473,14 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsNotEqualToZero_Int_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isNotEqualToZero(0, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentException =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isNotEqualToZero(0, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentException.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentException.getParams()).isEqualTo(new Object[] {0});
   }
 
   @Test
@@ -394,9 +494,14 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsNotEqualToZero_Long_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isNotEqualToZero(0L, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentException =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isNotEqualToZero(0L, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentException.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentException.getParams()).isEqualTo(new Object[] {0L});
   }
 
   @Test
@@ -410,9 +515,14 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsNotEqualToZero_Float_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isNotEqualToZero(0.0f, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentException =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isNotEqualToZero(0.0f, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentException.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentException.getParams()).isEqualTo(new Object[] {0.0f});
   }
 
   @Test
@@ -426,9 +536,14 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsNotEqualToZero_Double_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isNotEqualToZero(0.0, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentException =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isNotEqualToZero(0.0, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentException.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentException.getParams()).isEqualTo(new Object[] {0.0});
   }
 
   @Test
@@ -446,10 +561,14 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsNotEqualToZero_BigDecimal_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(
-            () -> ArgumentValidations.isNotEqualToZero(BigDecimal.ZERO, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentException =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isNotEqualToZero(BigDecimal.ZERO, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentException.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentException.getParams()).isEqualTo(new Object[] {BigDecimal.ZERO});
   }
 
   @Test
@@ -461,15 +580,25 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsLessThan_Byte_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(
-            () -> ArgumentValidations.isLessThan((byte) 1, (byte) 1, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentExceptionEquals =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isLessThan((byte) 1, (byte) 1, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(
-            () -> ArgumentValidations.isLessThan((byte) 2, (byte) 1, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getParams())
+        .isEqualTo(new Object[] {(byte) 1, (byte) 1});
+
+    InvalidArgumentException invalidArgumentExceptionGreaterThan =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isLessThan((byte) 2, (byte) 1, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentExceptionGreaterThan.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionGreaterThan.getParams())
+        .isEqualTo(new Object[] {(byte) 2, (byte) 1});
   }
 
   @Test
@@ -481,15 +610,25 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsLessThan_Short_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(
-            () -> ArgumentValidations.isLessThan((short) 1, (short) 1, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentExceptionEquals =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isLessThan((short) 1, (short) 1, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(
-            () -> ArgumentValidations.isLessThan((short) 2, (short) 1, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getParams())
+        .isEqualTo(new Object[] {(short) 1, (short) 1});
+
+    InvalidArgumentException invalidArgumentExceptionGreaterThan =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isLessThan((short) 2, (short) 1, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentExceptionGreaterThan.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionGreaterThan.getParams())
+        .isEqualTo(new Object[] {(short) 2, (short) 1});
   }
 
   @Test
@@ -500,13 +639,23 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsLessThan_Int_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isLessThan(1, 1, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentExceptionEquals =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isLessThan(1, 1, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isLessThan(2, 1, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getParams()).isEqualTo(new Object[] {1, 1});
+
+    InvalidArgumentException invalidArgumentExceptionGreaterThan =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isLessThan(2, 1, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentExceptionGreaterThan.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionGreaterThan.getParams()).isEqualTo(new Object[] {2, 1});
   }
 
   @Test
@@ -517,13 +666,23 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsLessThan_Long_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isLessThan(1L, 1L, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentExceptionEquals =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isLessThan(1L, 1L, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isLessThan(2L, 1L, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getParams()).isEqualTo(new Object[] {1L, 1L});
+
+    InvalidArgumentException invalidArgumentExceptionGreaterThan =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isLessThan(2L, 1L, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentExceptionGreaterThan.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionGreaterThan.getParams()).isEqualTo(new Object[] {2L, 1L});
   }
 
   @Test
@@ -534,13 +693,24 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsLessThan_Float_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isLessThan(1.0f, 1.0f, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentExceptionEquals =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isLessThan(1.0f, 1.0f, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isLessThan(2.0f, 1.0f, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getParams()).isEqualTo(new Object[] {1.0f, 1.0f});
+
+    InvalidArgumentException invalidArgumentExceptionGreaterThan =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isLessThan(2.0f, 1.0f, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentExceptionGreaterThan.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionGreaterThan.getParams())
+        .isEqualTo(new Object[] {2.0f, 1.0f});
   }
 
   @Test
@@ -551,13 +721,23 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsLessThan_Double_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isLessThan(1.0, 1.0, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentExceptionEquals =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isLessThan(1.0, 1.0, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isLessThan(2.0, 1.0, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getParams()).isEqualTo(new Object[] {1.0, 1.0});
+
+    InvalidArgumentException invalidArgumentExceptionGreaterThan =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isLessThan(2.0, 1.0, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentExceptionGreaterThan.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionGreaterThan.getParams()).isEqualTo(new Object[] {2.0, 1.0});
   }
 
   @Test
@@ -571,19 +751,28 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsLessThan_Comparable_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(
+    InvalidArgumentException invalidArgumentExceptionEquals =
+        catchThrowableOfType(
             () ->
                 ArgumentValidations.isLessThan(
-                    BigDecimal.ONE, BigDecimal.ONE, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+                    BigDecimal.ONE, BigDecimal.ONE, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(
-            () ->
-                ArgumentValidations.isLessThan(
-                    BigDecimal.valueOf(2), BigDecimal.ONE, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getParams())
+        .isEqualTo(new Object[] {BigDecimal.ONE, BigDecimal.ONE});
+
+    BigDecimal value = BigDecimal.valueOf(2);
+    InvalidArgumentException invalidArgumentExceptionGreaterThan =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isLessThan(value, BigDecimal.ONE, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentExceptionGreaterThan.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionGreaterThan.getParams())
+        .isEqualTo(new Object[] {value, BigDecimal.ONE});
   }
 
   @Test
@@ -594,13 +783,23 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsLessThanZero_Byte_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isLessThanZero((byte) 0, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentExceptionEquals =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isLessThanZero((byte) 0, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isLessThanZero((byte) 1, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getParams()).isEqualTo(new Object[] {(byte) 0});
+
+    InvalidArgumentException invalidArgumentExceptionGreaterThan =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isLessThanZero((byte) 1, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentExceptionGreaterThan.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionGreaterThan.getParams()).isEqualTo(new Object[] {(byte) 1});
   }
 
   @Test
@@ -611,13 +810,23 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsLessThanZero_Short_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isLessThanZero((short) 0, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentExceptionEquals =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isLessThanZero((short) 0, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isLessThanZero((short) 1, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getParams()).isEqualTo(new Object[] {(short) 0});
+
+    InvalidArgumentException invalidArgumentExceptionGreaterThan =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isLessThanZero((short) 1, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentExceptionGreaterThan.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionGreaterThan.getParams()).isEqualTo(new Object[] {(short) 1});
   }
 
   @Test
@@ -628,13 +837,23 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsLessThanZero_Int_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isLessThanZero(0, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentExceptionEquals =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isLessThanZero(0, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isLessThanZero(1, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getParams()).isEqualTo(new Object[] {0});
+
+    InvalidArgumentException invalidArgumentExceptionGreaterThan =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isLessThanZero(1, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentExceptionGreaterThan.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionGreaterThan.getParams()).isEqualTo(new Object[] {1});
   }
 
   @Test
@@ -645,13 +864,23 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsLessThanZero_Long_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isLessThanZero(0L, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentExceptionEquals =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isLessThanZero(0L, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isLessThanZero(1L, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getParams()).isEqualTo(new Object[] {0L});
+
+    InvalidArgumentException invalidArgumentExceptionGreaterThan =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isLessThanZero(1L, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentExceptionGreaterThan.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionGreaterThan.getParams()).isEqualTo(new Object[] {1L});
   }
 
   @Test
@@ -662,13 +891,23 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsLessThanZero_Float_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isLessThanZero(0.0f, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentExceptionEquals =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isLessThanZero(0.0f, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isLessThanZero(1.0f, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getParams()).isEqualTo(new Object[] {0.0f});
+
+    InvalidArgumentException invalidArgumentExceptionGreaterThan =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isLessThanZero(1.0f, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentExceptionGreaterThan.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionGreaterThan.getParams()).isEqualTo(new Object[] {1.0f});
   }
 
   @Test
@@ -679,13 +918,23 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsLessThanZero_Double_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isLessThanZero(0.0, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentExceptionEquals =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isLessThanZero(0.0, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isLessThanZero(1.0, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getParams()).isEqualTo(new Object[] {0.0});
+
+    InvalidArgumentException invalidArgumentExceptionGreaterThan =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isLessThanZero(1.0, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentExceptionGreaterThan.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionGreaterThan.getParams()).isEqualTo(new Object[] {1.0});
   }
 
   @Test
@@ -699,15 +948,25 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsLessThanZero_BigDecimal_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(
-            () -> ArgumentValidations.isLessThanZero(BigDecimal.ZERO, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentExceptionEquals =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isLessThanZero(BigDecimal.ZERO, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(
-            () -> ArgumentValidations.isLessThanZero(BigDecimal.ONE, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getParams())
+        .isEqualTo(new Object[] {BigDecimal.ZERO});
+
+    InvalidArgumentException invalidArgumentExceptionGreaterThan =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isLessThanZero(BigDecimal.ONE, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentExceptionGreaterThan.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionGreaterThan.getParams())
+        .isEqualTo(new Object[] {BigDecimal.ONE});
   }
 
   @Test
@@ -727,12 +986,16 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsLessThanOrEqualTo_Byte_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(
+    InvalidArgumentException invalidArgumentException =
+        catchThrowableOfType(
             () ->
                 ArgumentValidations.isLessThanOrEqualTo(
-                    (byte) 1, (byte) 0, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+                    (byte) 1, (byte) 0, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentException.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentException.getParams()).isEqualTo(new Object[] {(byte) 1, (byte) 0});
   }
 
   @Test
@@ -752,12 +1015,16 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsLessThanOrEqualTo_Short_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(
+    InvalidArgumentException invalidArgumentException =
+        catchThrowableOfType(
             () ->
                 ArgumentValidations.isLessThanOrEqualTo(
-                    (short) 1, (short) 0, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+                    (short) 1, (short) 0, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentException.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentException.getParams()).isEqualTo(new Object[] {(short) 1, (short) 0});
   }
 
   @Test
@@ -771,9 +1038,14 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsLessThanOrEqualTo_Int_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isLessThanOrEqualTo(1, 0, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentException =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isLessThanOrEqualTo(1, 0, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentException.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentException.getParams()).isEqualTo(new Object[] {1, 0});
   }
 
   @Test
@@ -789,10 +1061,14 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsLessThanOrEqualTo_Long_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(
-            () -> ArgumentValidations.isLessThanOrEqualTo(1L, 0L, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentException =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isLessThanOrEqualTo(1L, 0L, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentException.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentException.getParams()).isEqualTo(new Object[] {1L, 0L});
   }
 
   @Test
@@ -808,10 +1084,14 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsLessThanOrEqualTo_Float_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(
-            () -> ArgumentValidations.isLessThanOrEqualTo(1.0f, 0.0f, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentException =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isLessThanOrEqualTo(1.0f, 0.0f, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentException.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentException.getParams()).isEqualTo(new Object[] {1.0f, 0.0f});
   }
 
   @Test
@@ -827,10 +1107,14 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsLessThanOrEqualTo_Double_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(
-            () -> ArgumentValidations.isLessThanOrEqualTo(1.0, 0.0, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentException =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isLessThanOrEqualTo(1.0, 0.0, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentException.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentException.getParams()).isEqualTo(new Object[] {1.0, 0.0});
   }
 
   @Test
@@ -850,12 +1134,17 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsLessThanOrEqualTo_Comparable_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(
+    InvalidArgumentException invalidArgumentException =
+        catchThrowableOfType(
             () ->
                 ArgumentValidations.isLessThanOrEqualTo(
-                    BigDecimal.ONE, BigDecimal.ZERO, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+                    BigDecimal.ONE, BigDecimal.ZERO, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentException.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentException.getParams())
+        .isEqualTo(new Object[] {BigDecimal.ONE, BigDecimal.ZERO});
   }
 
   @Test
@@ -872,10 +1161,14 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsLessThanOrEqualToZero_Byte_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(
-            () -> ArgumentValidations.isLessThanOrEqualToZero((byte) 1, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentException =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isLessThanOrEqualToZero((byte) 1, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentException.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentException.getParams()).isEqualTo(new Object[] {(byte) 1});
   }
 
   @Test
@@ -893,11 +1186,15 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsLessThanOrEqualToZero_Short_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(
+    InvalidArgumentException invalidArgumentException =
+        catchThrowableOfType(
             () ->
-                ArgumentValidations.isLessThanOrEqualToZero((short) 1, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+                ArgumentValidations.isLessThanOrEqualToZero((short) 1, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentException.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentException.getParams()).isEqualTo(new Object[] {(short) 1});
   }
 
   @Test
@@ -912,10 +1209,14 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsLessThanOrEqualToZero_Int_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(
-            () -> ArgumentValidations.isLessThanOrEqualToZero(1, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentException =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isLessThanOrEqualToZero(1, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentException.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentException.getParams()).isEqualTo(new Object[] {1});
   }
 
   @Test
@@ -931,10 +1232,14 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsLessThanOrEqualToZero_Long_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(
-            () -> ArgumentValidations.isLessThanOrEqualToZero(1L, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentException =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isLessThanOrEqualToZero(1L, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentException.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentException.getParams()).isEqualTo(new Object[] {1L});
   }
 
   @Test
@@ -950,10 +1255,14 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsLessThanOrEqualToZero_Float_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(
-            () -> ArgumentValidations.isLessThanOrEqualToZero(1.0f, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentException =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isLessThanOrEqualToZero(1.0f, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentException.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentException.getParams()).isEqualTo(new Object[] {1.0f});
   }
 
   @Test
@@ -969,10 +1278,14 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsLessThanOrEqualToZero_Double_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(
-            () -> ArgumentValidations.isLessThanOrEqualToZero(1.0, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentException =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isLessThanOrEqualToZero(1.0, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentException.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentException.getParams()).isEqualTo(new Object[] {1.0});
   }
 
   @Test
@@ -992,12 +1305,16 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsLessThanOrEqualToZero_BigDecimal_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(
+    InvalidArgumentException invalidArgumentException =
+        catchThrowableOfType(
             () ->
                 ArgumentValidations.isLessThanOrEqualToZero(
-                    BigDecimal.ONE, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+                    BigDecimal.ONE, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentException.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentException.getParams()).isEqualTo(new Object[] {BigDecimal.ONE});
   }
 
   @Test
@@ -1009,15 +1326,25 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsGreaterThan_Byte_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(
-            () -> ArgumentValidations.isGreaterThan((byte) 1, (byte) 1, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentExceptionEquals =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isGreaterThan((byte) 1, (byte) 1, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(
-            () -> ArgumentValidations.isGreaterThan((byte) 1, (byte) 2, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getParams())
+        .isEqualTo(new Object[] {(byte) 1, (byte) 1});
+
+    InvalidArgumentException invalidArgumentExceptionLessThan =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isGreaterThan((byte) 1, (byte) 2, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentExceptionLessThan.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionLessThan.getParams())
+        .isEqualTo(new Object[] {(byte) 1, (byte) 2});
   }
 
   @Test
@@ -1030,17 +1357,27 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsGreaterThan_Short_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(
+    InvalidArgumentException invalidArgumentExceptionEquals =
+        catchThrowableOfType(
             () ->
-                ArgumentValidations.isGreaterThan((short) 1, (short) 1, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+                ArgumentValidations.isGreaterThan((short) 1, (short) 1, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(
+    assertThat(invalidArgumentExceptionEquals.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getParams())
+        .isEqualTo(new Object[] {(short) 1, (short) 1});
+
+    InvalidArgumentException invalidArgumentExceptionLessThan =
+        catchThrowableOfType(
             () ->
-                ArgumentValidations.isGreaterThan((short) 1, (short) 2, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+                ArgumentValidations.isGreaterThan((short) 1, (short) 2, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentExceptionLessThan.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionLessThan.getParams())
+        .isEqualTo(new Object[] {(short) 1, (short) 2});
   }
 
   @Test
@@ -1051,13 +1388,23 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsGreaterThan_Int_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isGreaterThan(1, 1, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentExceptionEquals =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isGreaterThan(1, 1, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isGreaterThan(1, 2, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getParams()).isEqualTo(new Object[] {1, 1});
+
+    InvalidArgumentException invalidArgumentExceptionLessThan =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isGreaterThan(1, 2, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentExceptionLessThan.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionLessThan.getParams()).isEqualTo(new Object[] {1, 2});
   }
 
   @Test
@@ -1068,13 +1415,23 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsGreaterThan_Long_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isGreaterThan(1L, 1L, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentExceptionEquals =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isGreaterThan(1L, 1L, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isGreaterThan(1L, 2L, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getParams()).isEqualTo(new Object[] {1L, 1L});
+
+    InvalidArgumentException invalidArgumentExceptionLessThan =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isGreaterThan(1L, 2L, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentExceptionLessThan.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionLessThan.getParams()).isEqualTo(new Object[] {1L, 2L});
   }
 
   @Test
@@ -1085,13 +1442,23 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsGreaterThan_Float_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isGreaterThan(1.0f, 1.0f, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentExceptionEquals =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isGreaterThan(1.0f, 1.0f, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isGreaterThan(1.0f, 2.0f, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getParams()).isEqualTo(new Object[] {1.0f, 1.0f});
+
+    InvalidArgumentException invalidArgumentExceptionLessThan =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isGreaterThan(1.0f, 2.0f, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentExceptionLessThan.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionLessThan.getParams()).isEqualTo(new Object[] {1.0f, 2.0f});
   }
 
   @Test
@@ -1102,13 +1469,23 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsGreaterThan_Double_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isGreaterThan(1.0, 1.0, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentExceptionEquals =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isGreaterThan(1.0, 1.0, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isGreaterThan(1.0, 2.0, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getParams()).isEqualTo(new Object[] {1.0, 1.0});
+
+    InvalidArgumentException invalidArgumentExceptionLessThan =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isGreaterThan(1.0, 2.0, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentExceptionLessThan.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionLessThan.getParams()).isEqualTo(new Object[] {1.0, 2.0});
   }
 
   @Test
@@ -1122,19 +1499,30 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsGreaterThan_Comparable_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(
+    InvalidArgumentException invalidArgumentExceptionEquals =
+        catchThrowableOfType(
             () ->
                 ArgumentValidations.isGreaterThan(
-                    BigDecimal.ONE, BigDecimal.ONE, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+                    BigDecimal.ONE, BigDecimal.ONE, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(
+    assertThat(invalidArgumentExceptionEquals.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getParams())
+        .isEqualTo(new Object[] {BigDecimal.ONE, BigDecimal.ONE});
+
+    BigDecimal other = BigDecimal.valueOf(2);
+    InvalidArgumentException invalidArgumentExceptionLessThan =
+        catchThrowableOfType(
             () ->
                 ArgumentValidations.isGreaterThan(
-                    BigDecimal.ONE, BigDecimal.valueOf(2), Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+                    BigDecimal.ONE, other, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentExceptionLessThan.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionLessThan.getParams())
+        .isEqualTo(new Object[] {BigDecimal.ONE, other});
   }
 
   @Test
@@ -1146,15 +1534,23 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsGreaterThanZero_Byte_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(
-            () -> ArgumentValidations.isGreaterThanZero((byte) 0, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentExceptionEquals =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isGreaterThanZero((byte) 0, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(
-            () -> ArgumentValidations.isGreaterThanZero((byte) -1, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getParams()).isEqualTo(new Object[] {(byte) 0});
+
+    InvalidArgumentException invalidArgumentExceptionLessThan =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isGreaterThanZero((byte) -1, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentExceptionLessThan.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionLessThan.getParams()).isEqualTo(new Object[] {(byte) -1});
   }
 
   @Test
@@ -1166,15 +1562,23 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsGreaterThanZero_Short_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(
-            () -> ArgumentValidations.isGreaterThanZero((short) 0, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentExceptionEquals =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isGreaterThanZero((short) 0, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(
-            () -> ArgumentValidations.isGreaterThanZero((short) -1, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getParams()).isEqualTo(new Object[] {(short) 0});
+
+    InvalidArgumentException invalidArgumentExceptionLessThan =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isGreaterThanZero((short) -1, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentExceptionLessThan.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionLessThan.getParams()).isEqualTo(new Object[] {(short) -1});
   }
 
   @Test
@@ -1185,13 +1589,23 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsGreaterThanZero_Int_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isGreaterThanZero(0, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentExceptionEquals =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isGreaterThanZero(0, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isGreaterThanZero(-1, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getParams()).isEqualTo(new Object[] {0});
+
+    InvalidArgumentException invalidArgumentExceptionLessThan =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isGreaterThanZero(-1, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentExceptionLessThan.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionLessThan.getParams()).isEqualTo(new Object[] {-1});
   }
 
   @Test
@@ -1202,13 +1616,23 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsGreaterThanZero_Long_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isGreaterThanZero(0L, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentExceptionEquals =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isGreaterThanZero(0L, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isGreaterThanZero(-1L, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getParams()).isEqualTo(new Object[] {0L});
+
+    InvalidArgumentException invalidArgumentExceptionLessThan =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isGreaterThanZero(-1L, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentExceptionLessThan.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionLessThan.getParams()).isEqualTo(new Object[] {-1L});
   }
 
   @Test
@@ -1219,13 +1643,23 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsGreaterThanZero_Float_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isGreaterThanZero(0.0f, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentExceptionEquals =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isGreaterThanZero(0.0f, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isGreaterThanZero(-1.0f, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getParams()).isEqualTo(new Object[] {0.0f});
+
+    InvalidArgumentException invalidArgumentExceptionLessThan =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isGreaterThanZero(-1.0f, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentExceptionLessThan.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionLessThan.getParams()).isEqualTo(new Object[] {-1.0f});
   }
 
   @Test
@@ -1236,13 +1670,23 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsGreaterThanZero_Double_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isGreaterThanZero(0.0, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentExceptionEquals =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isGreaterThanZero(0.0, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isGreaterThanZero(-1.0, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getParams()).isEqualTo(new Object[] {0.0});
+
+    InvalidArgumentException invalidArgumentExceptionLessThan =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isGreaterThanZero(-1.0, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentExceptionLessThan.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionLessThan.getParams()).isEqualTo(new Object[] {-1.0});
   }
 
   @Test
@@ -1254,18 +1698,26 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsGreaterThanZero_BigDecimal_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(
+    InvalidArgumentException invalidArgumentExceptionEquals =
+        catchThrowableOfType(
             () ->
-                ArgumentValidations.isGreaterThanZero(BigDecimal.ZERO, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+                ArgumentValidations.isGreaterThanZero(BigDecimal.ZERO, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(
-            () ->
-                ArgumentValidations.isGreaterThanZero(
-                    BigDecimal.valueOf(-1), Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getParams())
+        .isEqualTo(new Object[] {BigDecimal.ZERO});
+
+    BigDecimal value = BigDecimal.valueOf(-1);
+    InvalidArgumentException invalidArgumentExceptionLessThan =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isGreaterThanZero(value, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentExceptionLessThan.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionLessThan.getParams()).isEqualTo(new Object[] {value});
   }
 
   @Test
@@ -1285,12 +1737,17 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsGreaterThanOrEqualTo_Byte_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(
+    InvalidArgumentException invalidArgumentExceptionEquals =
+        catchThrowableOfType(
             () ->
                 ArgumentValidations.isGreaterThanOrEqualTo(
-                    (byte) 0, (byte) 1, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+                    (byte) 0, (byte) 1, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentExceptionEquals.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getParams())
+        .isEqualTo(new Object[] {(byte) 0, (byte) 1});
   }
 
   @Test
@@ -1310,12 +1767,17 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsGreaterThanOrEqualTo_Short_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(
+    InvalidArgumentException invalidArgumentExceptionEquals =
+        catchThrowableOfType(
             () ->
                 ArgumentValidations.isGreaterThanOrEqualTo(
-                    (short) 0, (short) 1, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+                    (short) 0, (short) 1, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentExceptionEquals.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getParams())
+        .isEqualTo(new Object[] {(short) 0, (short) 1});
   }
 
   @Test
@@ -1331,10 +1793,14 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsGreaterThanOrEqualTo_Int_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(
-            () -> ArgumentValidations.isGreaterThanOrEqualTo(0, 1, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentExceptionEquals =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isGreaterThanOrEqualTo(0, 1, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentExceptionEquals.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getParams()).isEqualTo(new Object[] {0, 1});
   }
 
   @Test
@@ -1350,10 +1816,14 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsGreaterThanOrEqualTo_Long_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(
-            () -> ArgumentValidations.isGreaterThanOrEqualTo(0L, 1L, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentExceptionEquals =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isGreaterThanOrEqualTo(0L, 1L, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentExceptionEquals.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getParams()).isEqualTo(new Object[] {0L, 1L});
   }
 
   @Test
@@ -1371,11 +1841,15 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsGreaterThanOrEqualTo_Float_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(
+    InvalidArgumentException invalidArgumentExceptionEquals =
+        catchThrowableOfType(
             () ->
-                ArgumentValidations.isGreaterThanOrEqualTo(0.0f, 1.0f, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+                ArgumentValidations.isGreaterThanOrEqualTo(0.0f, 1.0f, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentExceptionEquals.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getParams()).isEqualTo(new Object[] {0.0f, 1.0f});
   }
 
   @Test
@@ -1391,10 +1865,14 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsGreaterThanOrEqualTo_Double_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(
-            () -> ArgumentValidations.isGreaterThanOrEqualTo(0.0, 1.0, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentExceptionEquals =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isGreaterThanOrEqualTo(0.0, 1.0, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentExceptionEquals.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getParams()).isEqualTo(new Object[] {0.0, 1.0});
   }
 
   @Test
@@ -1414,12 +1892,17 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsGreaterThanOrEqualTo_Comparable_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(
+    InvalidArgumentException invalidArgumentExceptionEquals =
+        catchThrowableOfType(
             () ->
                 ArgumentValidations.isGreaterThanOrEqualTo(
-                    BigDecimal.ZERO, BigDecimal.ONE, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+                    BigDecimal.ZERO, BigDecimal.ONE, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentExceptionEquals.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getParams())
+        .isEqualTo(new Object[] {BigDecimal.ZERO, BigDecimal.ONE});
   }
 
   @Test
@@ -1439,12 +1922,16 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsGreaterThanOrEqualToZero_Byte_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(
+    InvalidArgumentException invalidArgumentExceptionEquals =
+        catchThrowableOfType(
             () ->
                 ArgumentValidations.isGreaterThanOrEqualToZero(
-                    (byte) -1, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+                    (byte) -1, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentExceptionEquals.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getParams()).isEqualTo(new Object[] {(byte) -1});
   }
 
   @Test
@@ -1464,12 +1951,16 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsGreaterThanOrEqualToZero_Short_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(
+    InvalidArgumentException invalidArgumentExceptionEquals =
+        catchThrowableOfType(
             () ->
                 ArgumentValidations.isGreaterThanOrEqualToZero(
-                    (byte) -1, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+                    (short) -1, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentExceptionEquals.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getParams()).isEqualTo(new Object[] {(short) -1});
   }
 
   @Test
@@ -1485,10 +1976,14 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsGreaterThanOrEqualToZero_Int_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(
-            () -> ArgumentValidations.isGreaterThanOrEqualToZero(-1, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentExceptionEquals =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isGreaterThanOrEqualToZero(-1, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentExceptionEquals.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getParams()).isEqualTo(new Object[] {-1});
   }
 
   @Test
@@ -1504,10 +1999,14 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsGreaterThanOrEqualToZero_Long_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(
-            () -> ArgumentValidations.isGreaterThanOrEqualToZero(-1L, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentExceptionEquals =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isGreaterThanOrEqualToZero(-1L, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentExceptionEquals.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getParams()).isEqualTo(new Object[] {-1L});
   }
 
   @Test
@@ -1523,10 +2022,14 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsGreaterThanOrEqualToZero_Float_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(
-            () -> ArgumentValidations.isGreaterThanOrEqualToZero(-1.0f, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentExceptionEquals =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isGreaterThanOrEqualToZero(-1.0f, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentExceptionEquals.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getParams()).isEqualTo(new Object[] {-1.0f});
   }
 
   @Test
@@ -1542,10 +2045,14 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsGreaterThanOrEqualToZero_Double_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(
-            () -> ArgumentValidations.isGreaterThanOrEqualToZero(-1.0, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentExceptionEquals =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isGreaterThanOrEqualToZero(-1.0, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentExceptionEquals.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getParams()).isEqualTo(new Object[] {-1.0});
   }
 
   @Test
@@ -1565,12 +2072,15 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsGreaterThanOrEqualToZero_BigDecimal_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(
-            () ->
-                ArgumentValidations.isGreaterThanOrEqualToZero(
-                    BigDecimal.valueOf(-1), Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    BigDecimal value = BigDecimal.valueOf(-1);
+    InvalidArgumentException invalidArgumentExceptionEquals =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isGreaterThanOrEqualToZero(value, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentExceptionEquals.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionEquals.getParams()).isEqualTo(new Object[] {value});
   }
 
   @Test
@@ -1596,19 +2106,29 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsBetween_Byte_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(
+    InvalidArgumentException invalidArgumentExceptionLess =
+        catchThrowableOfType(
             () ->
                 ArgumentValidations.isBetween(
-                    (byte) 0, (byte) 1, (byte) 3, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+                    (byte) 0, (byte) 1, (byte) 3, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(
+    assertThat(invalidArgumentExceptionLess.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionLess.getParams())
+        .isEqualTo(new Object[] {(byte) 0, (byte) 1, (byte) 3});
+
+    InvalidArgumentException invalidArgumentExceptionGreater =
+        catchThrowableOfType(
             () ->
                 ArgumentValidations.isBetween(
-                    (byte) 4, (byte) 1, (byte) 3, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+                    (byte) 4, (byte) 1, (byte) 3, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentExceptionGreater.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionGreater.getParams())
+        .isEqualTo(new Object[] {(byte) 4, (byte) 1, (byte) 3});
   }
 
   @Test
@@ -1634,19 +2154,29 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsBetween_Short_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(
+    InvalidArgumentException invalidArgumentExceptionLess =
+        catchThrowableOfType(
             () ->
                 ArgumentValidations.isBetween(
-                    (short) 0, (short) 1, (short) 3, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+                    (short) 0, (short) 1, (short) 3, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(
+    assertThat(invalidArgumentExceptionLess.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionLess.getParams())
+        .isEqualTo(new Object[] {(short) 0, (short) 1, (short) 3});
+
+    InvalidArgumentException invalidArgumentExceptionGreater =
+        catchThrowableOfType(
             () ->
                 ArgumentValidations.isBetween(
-                    (short) 4, (short) 1, (short) 3, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+                    (short) 4, (short) 1, (short) 3, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentExceptionGreater.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionGreater.getParams())
+        .isEqualTo(new Object[] {(short) 4, (short) 1, (short) 3});
   }
 
   @Test
@@ -1663,13 +2193,23 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsBetween_Int_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isBetween(0, 1, 3, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentExceptionLess =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isBetween(0, 1, 3, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isBetween(4, 1, 3, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionLess.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionLess.getParams()).isEqualTo(new Object[] {0, 1, 3});
+
+    InvalidArgumentException invalidArgumentExceptionGreater =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isBetween(4, 1, 3, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentExceptionGreater.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionGreater.getParams()).isEqualTo(new Object[] {4, 1, 3});
   }
 
   @Test
@@ -1686,13 +2226,23 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsBetween_Long_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isBetween(0L, 1L, 3L, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentExceptionLess =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isBetween(0L, 1L, 3L, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isBetween(4L, 1L, 3L, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionLess.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionLess.getParams()).isEqualTo(new Object[] {0L, 1L, 3L});
+
+    InvalidArgumentException invalidArgumentExceptionGreater =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isBetween(4L, 1L, 3L, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentExceptionGreater.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionGreater.getParams()).isEqualTo(new Object[] {4L, 1L, 3L});
   }
 
   @Test
@@ -1712,15 +2262,24 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsBetween_Float_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(
-            () -> ArgumentValidations.isBetween(0.0f, 1.0f, 3.0f, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentExceptionLess =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isBetween(0.0f, 1.0f, 3.0f, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(
-            () -> ArgumentValidations.isBetween(4.0f, 1.0f, 3.0f, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionLess.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionLess.getParams()).isEqualTo(new Object[] {0.0f, 1.0f, 3.0f});
+
+    InvalidArgumentException invalidArgumentExceptionGreater =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isBetween(4.0f, 1.0f, 3.0f, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentExceptionGreater.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionGreater.getParams())
+        .isEqualTo(new Object[] {4.0f, 1.0f, 3.0f});
   }
 
   @Test
@@ -1737,13 +2296,23 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsBetween_Double_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isBetween(0.0, 1.0, 3.0, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentExceptionLess =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isBetween(0.0, 1.0, 3.0, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isBetween(4.0, 1.0, 3.0, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionLess.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionLess.getParams()).isEqualTo(new Object[] {0.0, 1.0, 3.0});
+
+    InvalidArgumentException invalidArgumentExceptionGreater =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isBetween(4.0, 1.0, 3.0, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentExceptionGreater.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionGreater.getParams()).isEqualTo(new Object[] {4.0, 1.0, 3.0});
   }
 
   @Test
@@ -1778,25 +2347,31 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsBetween_BigDecimal_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(
+    BigDecimal endValue = BigDecimal.valueOf(3);
+    InvalidArgumentException invalidArgumentExceptionLess =
+        catchThrowableOfType(
             () ->
                 ArgumentValidations.isBetween(
-                    BigDecimal.ZERO,
-                    BigDecimal.ONE,
-                    BigDecimal.valueOf(3),
-                    Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+                    BigDecimal.ZERO, BigDecimal.ONE, endValue, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(
+    assertThat(invalidArgumentExceptionLess.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionLess.getParams())
+        .isEqualTo(new Object[] {BigDecimal.ZERO, BigDecimal.ONE, endValue});
+
+    BigDecimal value = BigDecimal.valueOf(4);
+    InvalidArgumentException invalidArgumentExceptionGreater =
+        catchThrowableOfType(
             () ->
                 ArgumentValidations.isBetween(
-                    BigDecimal.valueOf(4),
-                    BigDecimal.ONE,
-                    BigDecimal.valueOf(3),
-                    Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+                    value, BigDecimal.ONE, endValue, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentExceptionGreater.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentExceptionGreater.getParams())
+        .isEqualTo(new Object[] {value, BigDecimal.ONE, endValue});
   }
 
   @Test
@@ -1807,9 +2382,13 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsTrue_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isTrue(false, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentException =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isTrue(false, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentException.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
   }
 
   @Test
@@ -1820,9 +2399,13 @@ class ArgumentValidationsTest {
 
   @Test
   void testIsFalse_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.isFalse(true, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentException =
+        catchThrowableOfType(
+            () -> ArgumentValidations.isFalse(true, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentException.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
   }
 
   @Test
@@ -1836,12 +2419,16 @@ class ArgumentValidationsTest {
 
   @Test
   void testMatchesPattern_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(
+    InvalidArgumentException invalidArgumentException =
+        catchThrowableOfType(
             () ->
                 ArgumentValidations.matchesPattern(
-                    "12-345", "^\\d{3}-\\d{2}$", Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+                    "12-345", "^\\d{3}-\\d{2}$", Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentException.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentException.getParams()).isEqualTo(new Object[] {"12-345"});
   }
 
   @Test
@@ -1860,12 +2447,16 @@ class ArgumentValidationsTest {
     Collection<String> collection = new ArrayList<>();
     collection.add("Any string");
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(
+    InvalidArgumentException invalidArgumentException =
+        catchThrowableOfType(
             () ->
                 ArgumentValidations.contains(
-                    "Other string", collection, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+                    "Other string", collection, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentException.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentException.getParams()).isEqualTo(new Object[] {"Other string"});
   }
 
   @Test
@@ -1885,12 +2476,16 @@ class ArgumentValidationsTest {
     Collection<String> collection = new ArrayList<>();
     collection.add("Any string");
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(
+    InvalidArgumentException invalidArgumentException =
+        catchThrowableOfType(
             () ->
                 ArgumentValidations.doesNotContain(
-                    "Any string", collection, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+                    "Any string", collection, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentException.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentException.getParams()).isEqualTo(new Object[] {"Any string"});
   }
 
   @Test
@@ -1901,9 +2496,14 @@ class ArgumentValidationsTest {
 
   @Test
   void testHasSize_CharSequence_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.hasSize("Any string", 5, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentException =
+        catchThrowableOfType(
+            () -> ArgumentValidations.hasSize("Any string", 5, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentException.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentException.getParams()).isEqualTo(new Object[] {"Any string", 5});
   }
 
   @Test
@@ -1920,9 +2520,14 @@ class ArgumentValidationsTest {
     Map<String, String> map = new HashMap<>();
     map.put("Key", "Value");
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.hasSize(map, 2, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentException =
+        catchThrowableOfType(
+            () -> ArgumentValidations.hasSize(map, 2, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentException.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentException.getParams()).isEqualTo(new Object[] {2});
   }
 
   @Test
@@ -1939,9 +2544,14 @@ class ArgumentValidationsTest {
     Set<String> set = new TreeSet<>();
     set.add("Any string");
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.hasSize(set, 2, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentException =
+        catchThrowableOfType(
+            () -> ArgumentValidations.hasSize(set, 2, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentException.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentException.getParams()).isEqualTo(new Object[] {2});
   }
 
   @Test
@@ -1954,11 +2564,15 @@ class ArgumentValidationsTest {
 
   @Test
   void testHasSizeBetween_CharSequence_Error() {
-    assertThatInvalidArgumentException()
-        .isThrownBy(
+    InvalidArgumentException invalidArgumentException =
+        catchThrowableOfType(
             () ->
-                ArgumentValidations.hasSizeBetween("Any string", 1, 5, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+                ArgumentValidations.hasSizeBetween("Any string", 1, 5, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentException.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentException.getParams()).isEqualTo(new Object[] {"Any string", 1, 5});
   }
 
   @Test
@@ -1975,9 +2589,14 @@ class ArgumentValidationsTest {
     Map<String, String> map = new HashMap<>();
     map.put("Key", "Value");
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.hasSizeBetween(map, 2, 3, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentException =
+        catchThrowableOfType(
+            () -> ArgumentValidations.hasSizeBetween(map, 2, 3, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentException.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentException.getParams()).isEqualTo(new Object[] {2, 3});
   }
 
   @Test
@@ -1994,9 +2613,14 @@ class ArgumentValidationsTest {
     Set<String> set = new TreeSet<>();
     set.add("Any string");
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(() -> ArgumentValidations.hasSizeBetween(set, 2, 3, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    InvalidArgumentException invalidArgumentException =
+        catchThrowableOfType(
+            () -> ArgumentValidations.hasSizeBetween(set, 2, 3, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentException.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentException.getParams()).isEqualTo(new Object[] {2, 3});
   }
 
   @Test
@@ -2014,12 +2638,17 @@ class ArgumentValidationsTest {
   void testIsInstanceOf_Error() {
     String anyString = "Any string";
 
-    assertThatInvalidArgumentException()
-        .isThrownBy(
+    InvalidArgumentException invalidArgumentException =
+        catchThrowableOfType(
             () ->
                 ArgumentValidations.isInstanceOf(
-                    anyString, Integer.class, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+                    anyString, Integer.class, Validations.ANY_VALIDATION),
+            InvalidArgumentException.class);
+
+    assertThat(invalidArgumentException.getValidationMessage())
+        .isEqualTo(Validations.ANY_VALIDATION);
+    assertThat(invalidArgumentException.getParams())
+        .isEqualTo(new Object[] {anyString, Integer.class});
   }
 
   private enum Validations implements ValidationMessage {

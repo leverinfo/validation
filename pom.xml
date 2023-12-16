@@ -7,7 +7,7 @@
 
   <groupId>br.com.leverinfo</groupId>
   <artifactId>validation</artifactId>
-  <version>0.3.2</version>
+  <version>0.4.0</version>
   <name>${project.groupId}:${project.artifactId}</name>
   <description>A library that helps handle custom validations.</description>
   <url>https://github.com/leverinfo/validation</url>
@@ -17,26 +17,26 @@
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
 
-    <test.version>0.1.0</test.version>
-    <junit-jupiter.version>5.9.3</junit-jupiter.version>
-    <junit-platform-runner.version>1.9.3</junit-platform-runner.version>
+    <junit-jupiter.version>5.10.1</junit-jupiter.version>
+    <junit-platform-runner.version>1.10.1</junit-platform-runner.version>
     <junit-platform-surefire-provider.version>1.3.2</junit-platform-surefire-provider.version>
-    <commons-lang3.version>3.12.0</commons-lang3.version>
+    <assertj.version>3.24.2</assertj.version>
+    <commons-lang3.version>3.14.0</commons-lang3.version>
 
-    <maven-shade-plugin.version>3.5.0</maven-shade-plugin.version>
+    <maven-shade-plugin.version>3.5.1</maven-shade-plugin.version>
     <maven-source-plugin.version>3.3.0</maven-source-plugin.version>
-    <maven-javadoc-plugin.version>3.5.0</maven-javadoc-plugin.version>
+    <maven-javadoc-plugin.version>3.6.3</maven-javadoc-plugin.version>
     <maven-gpg-plugin.version>3.1.0</maven-gpg-plugin.version>
     <nexus-staging-maven-plugin.version>1.6.13</nexus-staging-maven-plugin.version>
-    <maven-clean-plugin.version>3.3.1</maven-clean-plugin.version>
+    <maven-clean-plugin.version>3.3.2</maven-clean-plugin.version>
     <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
     <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
-    <maven-surefire-plugin.version>3.1.2</maven-surefire-plugin.version>
+    <maven-surefire-plugin.version>3.2.3</maven-surefire-plugin.version>
     <maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
     <maven-install-plugin.version>3.1.1</maven-install-plugin.version>
     <maven-deploy-plugin.version>3.1.1</maven-deploy-plugin.version>
     <maven-site-plugin.version>3.12.1</maven-site-plugin.version>
-    <maven-project-info-reports-plugin.version>3.4.5</maven-project-info-reports-plugin.version>
+    <maven-project-info-reports-plugin.version>3.5.0</maven-project-info-reports-plugin.version>
   </properties>
 
   <licenses>
@@ -76,16 +76,15 @@
 
   <dependencies>
     <dependency>
-      <groupId>br.com.leverinfo</groupId>
-      <artifactId>test</artifactId>
-      <version>${test.version}</version>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
       <scope>test</scope>
     </dependency>
 
     <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-engine</artifactId>
-      <scope>test</scope>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <version>${assertj.version}</version>
     </dependency>
 
     <dependency>

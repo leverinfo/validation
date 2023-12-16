@@ -14,14 +14,14 @@ To start, add that Maven dependency:
 <dependency>
   <groupId>br.com.leverinfo</groupId>
   <artifactId>validation</artifactId>
-  <version>0.3.2</version>
+  <version>0.4.0</version>
 </dependency>
 ```
 
 or Gradle:
 
 ```
-implementation 'br.com.leverinfo:validation:0.3.2'
+implementation 'br.com.leverinfo:validation:0.4.0'
 ```
 
 ...then implement the interface `ValidationMessage` by enum (it can be by a class as well):
@@ -69,7 +69,7 @@ public class Foo {
 ```
 
 * If argument value is null, then a `RequiredArgumentException` will be thrown.
-* If argument value is empty, then a `InvalidArgumentException` will be thrown.
+* If argument value is blank, then a `InvalidArgumentException` will be thrown.
 
 ## Available Validations
 

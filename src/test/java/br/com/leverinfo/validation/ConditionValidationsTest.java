@@ -1,8 +1,10 @@
 package br.com.leverinfo.validation;
 
-import static br.com.leverinfo.test.ValidationAssertions.assertThatNotAllowedException;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.catchThrowableOfType;
 
+import br.com.leverinfo.validation.exception.NotAllowedException;
 import org.junit.jupiter.api.Test;
 
 class ConditionValidationsTest {
@@ -15,9 +17,12 @@ class ConditionValidationsTest {
 
   @Test
   void testIsTrue_Error() {
-    assertThatNotAllowedException()
-        .isThrownBy(() -> ConditionValidations.isTrue(false, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    NotAllowedException notAllowedException =
+        catchThrowableOfType(
+            () -> ConditionValidations.isTrue(false, Validations.ANY_VALIDATION),
+            NotAllowedException.class);
+
+    assertThat(notAllowedException.getValidationMessage()).isEqualTo(Validations.ANY_VALIDATION);
   }
 
   @Test
@@ -28,9 +33,12 @@ class ConditionValidationsTest {
 
   @Test
   void testIsFalse_Error() {
-    assertThatNotAllowedException()
-        .isThrownBy(() -> ConditionValidations.isFalse(true, Validations.ANY_VALIDATION))
-        .withValidationMessage(Validations.ANY_VALIDATION);
+    NotAllowedException notAllowedException =
+        catchThrowableOfType(
+            () -> ConditionValidations.isFalse(true, Validations.ANY_VALIDATION),
+            NotAllowedException.class);
+
+    assertThat(notAllowedException.getValidationMessage()).isEqualTo(Validations.ANY_VALIDATION);
   }
 
   private enum Validations implements ValidationMessage {

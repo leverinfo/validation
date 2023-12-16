@@ -226,7 +226,7 @@ public final class ArgumentValidations {
    */
   public static <T> void isEqualTo(T value, T other, ValidationMessage message) {
     if (!Objects.equals(value, other)) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value, other);
     }
   }
 
@@ -240,7 +240,7 @@ public final class ArgumentValidations {
    */
   public static <T> void isNotEqualTo(T value, T other, ValidationMessage message) {
     if (Objects.equals(value, other)) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value, other);
     }
   }
 
@@ -252,7 +252,7 @@ public final class ArgumentValidations {
    */
   public static void isNotEqualToZero(byte value, ValidationMessage message) {
     if (value == 0) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value);
     }
   }
 
@@ -264,7 +264,7 @@ public final class ArgumentValidations {
    */
   public static void isNotEqualToZero(short value, ValidationMessage message) {
     if (value == 0) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value);
     }
   }
 
@@ -276,7 +276,7 @@ public final class ArgumentValidations {
    */
   public static void isNotEqualToZero(int value, ValidationMessage message) {
     if (value == 0) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value);
     }
   }
 
@@ -288,7 +288,7 @@ public final class ArgumentValidations {
    */
   public static void isNotEqualToZero(long value, ValidationMessage message) {
     if (value == 0) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value);
     }
   }
 
@@ -300,7 +300,7 @@ public final class ArgumentValidations {
    */
   public static void isNotEqualToZero(float value, ValidationMessage message) {
     if (value == 0) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value);
     }
   }
 
@@ -312,7 +312,7 @@ public final class ArgumentValidations {
    */
   public static void isNotEqualToZero(double value, ValidationMessage message) {
     if (value == 0) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value);
     }
   }
 
@@ -324,7 +324,7 @@ public final class ArgumentValidations {
    */
   public static void isNotEqualToZero(BigDecimal value, ValidationMessage message) {
     if (value.compareTo(BigDecimal.ZERO) == 0) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value);
     }
   }
 
@@ -337,7 +337,7 @@ public final class ArgumentValidations {
    */
   public static void isLessThan(byte value, byte other, ValidationMessage message) {
     if (value >= other) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value, other);
     }
   }
 
@@ -350,7 +350,7 @@ public final class ArgumentValidations {
    */
   public static void isLessThan(short value, short other, ValidationMessage message) {
     if (value >= other) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value, other);
     }
   }
 
@@ -363,7 +363,7 @@ public final class ArgumentValidations {
    */
   public static void isLessThan(int value, int other, ValidationMessage message) {
     if (value >= other) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value, other);
     }
   }
 
@@ -376,7 +376,7 @@ public final class ArgumentValidations {
    */
   public static void isLessThan(long value, long other, ValidationMessage message) {
     if (value >= other) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value, other);
     }
   }
 
@@ -389,7 +389,7 @@ public final class ArgumentValidations {
    */
   public static void isLessThan(float value, float other, ValidationMessage message) {
     if (value >= other) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value, other);
     }
   }
 
@@ -402,7 +402,7 @@ public final class ArgumentValidations {
    */
   public static void isLessThan(double value, double other, ValidationMessage message) {
     if (value >= other) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value, other);
     }
   }
 
@@ -417,7 +417,7 @@ public final class ArgumentValidations {
   public static <T extends Comparable<T>> void isLessThan(
       T value, T other, ValidationMessage message) {
     if (value.compareTo(other) >= 0) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value, other);
     }
   }
 
@@ -429,7 +429,7 @@ public final class ArgumentValidations {
    */
   public static void isLessThanZero(byte value, ValidationMessage message) {
     if (value >= 0) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value);
     }
   }
 
@@ -441,7 +441,7 @@ public final class ArgumentValidations {
    */
   public static void isLessThanZero(short value, ValidationMessage message) {
     if (value >= 0) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value);
     }
   }
 
@@ -453,7 +453,7 @@ public final class ArgumentValidations {
    */
   public static void isLessThanZero(int value, ValidationMessage message) {
     if (value >= 0) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value);
     }
   }
 
@@ -465,7 +465,7 @@ public final class ArgumentValidations {
    */
   public static void isLessThanZero(long value, ValidationMessage message) {
     if (value >= 0) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value);
     }
   }
 
@@ -477,7 +477,7 @@ public final class ArgumentValidations {
    */
   public static void isLessThanZero(float value, ValidationMessage message) {
     if (value >= 0) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value);
     }
   }
 
@@ -489,7 +489,7 @@ public final class ArgumentValidations {
    */
   public static void isLessThanZero(double value, ValidationMessage message) {
     if (value >= 0) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value);
     }
   }
 
@@ -501,7 +501,7 @@ public final class ArgumentValidations {
    */
   public static void isLessThanZero(BigDecimal value, ValidationMessage message) {
     if (value.compareTo(java.math.BigDecimal.ZERO) >= 0) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value);
     }
   }
 
@@ -514,7 +514,7 @@ public final class ArgumentValidations {
    */
   public static void isLessThanOrEqualTo(byte value, byte other, ValidationMessage message) {
     if (value > other) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value, other);
     }
   }
 
@@ -527,7 +527,7 @@ public final class ArgumentValidations {
    */
   public static void isLessThanOrEqualTo(short value, short other, ValidationMessage message) {
     if (value > other) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value, other);
     }
   }
 
@@ -540,7 +540,7 @@ public final class ArgumentValidations {
    */
   public static void isLessThanOrEqualTo(int value, int other, ValidationMessage message) {
     if (value > other) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value, other);
     }
   }
 
@@ -553,7 +553,7 @@ public final class ArgumentValidations {
    */
   public static void isLessThanOrEqualTo(long value, long other, ValidationMessage message) {
     if (value > other) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value, other);
     }
   }
 
@@ -566,7 +566,7 @@ public final class ArgumentValidations {
    */
   public static void isLessThanOrEqualTo(float value, float other, ValidationMessage message) {
     if (value > other) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value, other);
     }
   }
 
@@ -579,7 +579,7 @@ public final class ArgumentValidations {
    */
   public static void isLessThanOrEqualTo(double value, double other, ValidationMessage message) {
     if (value > other) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value, other);
     }
   }
 
@@ -594,7 +594,7 @@ public final class ArgumentValidations {
   public static <T extends Comparable<T>> void isLessThanOrEqualTo(
       T value, T other, ValidationMessage message) {
     if (value.compareTo(other) > 0) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value, other);
     }
   }
 
@@ -606,7 +606,7 @@ public final class ArgumentValidations {
    */
   public static void isLessThanOrEqualToZero(byte value, ValidationMessage message) {
     if (value > 0) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value);
     }
   }
 
@@ -618,7 +618,7 @@ public final class ArgumentValidations {
    */
   public static void isLessThanOrEqualToZero(short value, ValidationMessage message) {
     if (value > 0) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value);
     }
   }
 
@@ -630,7 +630,7 @@ public final class ArgumentValidations {
    */
   public static void isLessThanOrEqualToZero(int value, ValidationMessage message) {
     if (value > 0) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value);
     }
   }
 
@@ -642,7 +642,7 @@ public final class ArgumentValidations {
    */
   public static void isLessThanOrEqualToZero(long value, ValidationMessage message) {
     if (value > 0) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value);
     }
   }
 
@@ -654,7 +654,7 @@ public final class ArgumentValidations {
    */
   public static void isLessThanOrEqualToZero(float value, ValidationMessage message) {
     if (value > 0) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value);
     }
   }
 
@@ -666,7 +666,7 @@ public final class ArgumentValidations {
    */
   public static void isLessThanOrEqualToZero(double value, ValidationMessage message) {
     if (value > 0) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value);
     }
   }
 
@@ -678,7 +678,7 @@ public final class ArgumentValidations {
    */
   public static void isLessThanOrEqualToZero(BigDecimal value, ValidationMessage message) {
     if (value.compareTo(BigDecimal.ZERO) > 0) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value);
     }
   }
 
@@ -691,7 +691,7 @@ public final class ArgumentValidations {
    */
   public static void isGreaterThan(byte value, byte other, ValidationMessage message) {
     if (value <= other) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value, other);
     }
   }
 
@@ -704,7 +704,7 @@ public final class ArgumentValidations {
    */
   public static void isGreaterThan(short value, short other, ValidationMessage message) {
     if (value <= other) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value, other);
     }
   }
 
@@ -717,7 +717,7 @@ public final class ArgumentValidations {
    */
   public static void isGreaterThan(int value, int other, ValidationMessage message) {
     if (value <= other) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value, other);
     }
   }
 
@@ -730,7 +730,7 @@ public final class ArgumentValidations {
    */
   public static void isGreaterThan(long value, long other, ValidationMessage message) {
     if (value <= other) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value, other);
     }
   }
 
@@ -743,7 +743,7 @@ public final class ArgumentValidations {
    */
   public static void isGreaterThan(float value, float other, ValidationMessage message) {
     if (value <= other) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value, other);
     }
   }
 
@@ -756,7 +756,7 @@ public final class ArgumentValidations {
    */
   public static void isGreaterThan(double value, double other, ValidationMessage message) {
     if (value <= other) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value, other);
     }
   }
 
@@ -771,7 +771,7 @@ public final class ArgumentValidations {
   public static <T extends Comparable<T>> void isGreaterThan(
       T value, T other, ValidationMessage message) {
     if (value.compareTo(other) <= 0) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value, other);
     }
   }
 
@@ -783,7 +783,7 @@ public final class ArgumentValidations {
    */
   public static void isGreaterThanZero(byte value, ValidationMessage message) {
     if (value <= 0) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value);
     }
   }
 
@@ -795,7 +795,7 @@ public final class ArgumentValidations {
    */
   public static void isGreaterThanZero(short value, ValidationMessage message) {
     if (value <= 0) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value);
     }
   }
 
@@ -807,7 +807,7 @@ public final class ArgumentValidations {
    */
   public static void isGreaterThanZero(int value, ValidationMessage message) {
     if (value <= 0) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value);
     }
   }
 
@@ -819,7 +819,7 @@ public final class ArgumentValidations {
    */
   public static void isGreaterThanZero(long value, ValidationMessage message) {
     if (value <= 0) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value);
     }
   }
 
@@ -831,7 +831,7 @@ public final class ArgumentValidations {
    */
   public static void isGreaterThanZero(float value, ValidationMessage message) {
     if (value <= 0) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value);
     }
   }
 
@@ -843,7 +843,7 @@ public final class ArgumentValidations {
    */
   public static void isGreaterThanZero(double value, ValidationMessage message) {
     if (value <= 0) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value);
     }
   }
 
@@ -855,7 +855,7 @@ public final class ArgumentValidations {
    */
   public static void isGreaterThanZero(BigDecimal value, ValidationMessage message) {
     if (value.compareTo(java.math.BigDecimal.ZERO) <= 0) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value);
     }
   }
 
@@ -868,7 +868,7 @@ public final class ArgumentValidations {
    */
   public static void isGreaterThanOrEqualTo(byte value, byte other, ValidationMessage message) {
     if (value < other) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value, other);
     }
   }
 
@@ -881,7 +881,7 @@ public final class ArgumentValidations {
    */
   public static void isGreaterThanOrEqualTo(short value, short other, ValidationMessage message) {
     if (value < other) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value, other);
     }
   }
 
@@ -894,7 +894,7 @@ public final class ArgumentValidations {
    */
   public static void isGreaterThanOrEqualTo(int value, int other, ValidationMessage message) {
     if (value < other) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value, other);
     }
   }
 
@@ -907,7 +907,7 @@ public final class ArgumentValidations {
    */
   public static void isGreaterThanOrEqualTo(long value, long other, ValidationMessage message) {
     if (value < other) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value, other);
     }
   }
 
@@ -920,7 +920,7 @@ public final class ArgumentValidations {
    */
   public static void isGreaterThanOrEqualTo(float value, float other, ValidationMessage message) {
     if (value < other) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value, other);
     }
   }
 
@@ -933,7 +933,7 @@ public final class ArgumentValidations {
    */
   public static void isGreaterThanOrEqualTo(double value, double other, ValidationMessage message) {
     if (value < other) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value, other);
     }
   }
 
@@ -948,7 +948,7 @@ public final class ArgumentValidations {
   public static <T extends Comparable<T>> void isGreaterThanOrEqualTo(
       T value, T other, ValidationMessage message) {
     if (value.compareTo(other) < 0) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value, other);
     }
   }
 
@@ -960,7 +960,7 @@ public final class ArgumentValidations {
    */
   public static void isGreaterThanOrEqualToZero(byte value, ValidationMessage message) {
     if (value < 0) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value);
     }
   }
 
@@ -972,7 +972,7 @@ public final class ArgumentValidations {
    */
   public static void isGreaterThanOrEqualToZero(short value, ValidationMessage message) {
     if (value < 0) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value);
     }
   }
 
@@ -984,7 +984,7 @@ public final class ArgumentValidations {
    */
   public static void isGreaterThanOrEqualToZero(int value, ValidationMessage message) {
     if (value < 0) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value);
     }
   }
 
@@ -996,7 +996,7 @@ public final class ArgumentValidations {
    */
   public static void isGreaterThanOrEqualToZero(long value, ValidationMessage message) {
     if (value < 0) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value);
     }
   }
 
@@ -1008,7 +1008,7 @@ public final class ArgumentValidations {
    */
   public static void isGreaterThanOrEqualToZero(float value, ValidationMessage message) {
     if (value < 0) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value);
     }
   }
 
@@ -1020,7 +1020,7 @@ public final class ArgumentValidations {
    */
   public static void isGreaterThanOrEqualToZero(double value, ValidationMessage message) {
     if (value < 0) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value);
     }
   }
 
@@ -1032,7 +1032,7 @@ public final class ArgumentValidations {
    */
   public static void isGreaterThanOrEqualToZero(BigDecimal value, ValidationMessage message) {
     if (value.compareTo(BigDecimal.ZERO) < 0) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value);
     }
   }
 
@@ -1047,7 +1047,7 @@ public final class ArgumentValidations {
   public static void isBetween(
       byte value, byte startValue, byte endValue, ValidationMessage message) {
     if (!(value >= startValue && value <= endValue)) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value, startValue, endValue);
     }
   }
 
@@ -1062,7 +1062,7 @@ public final class ArgumentValidations {
   public static void isBetween(
       short value, short startValue, short endValue, ValidationMessage message) {
     if (!(value >= startValue && value <= endValue)) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value, startValue, endValue);
     }
   }
 
@@ -1076,7 +1076,7 @@ public final class ArgumentValidations {
    */
   public static void isBetween(int value, int startValue, int endValue, ValidationMessage message) {
     if (!(value >= startValue && value <= endValue)) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value, startValue, endValue);
     }
   }
 
@@ -1091,7 +1091,7 @@ public final class ArgumentValidations {
   public static void isBetween(
       long value, long startValue, long endValue, ValidationMessage message) {
     if (!(value >= startValue && value <= endValue)) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value, startValue, endValue);
     }
   }
 
@@ -1106,7 +1106,7 @@ public final class ArgumentValidations {
   public static void isBetween(
       float value, float startValue, float endValue, ValidationMessage message) {
     if (!(value >= startValue && value <= endValue)) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value, startValue, endValue);
     }
   }
 
@@ -1121,7 +1121,7 @@ public final class ArgumentValidations {
   public static void isBetween(
       double value, double startValue, double endValue, ValidationMessage message) {
     if (!(value >= startValue && value <= endValue)) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value, startValue, endValue);
     }
   }
 
@@ -1136,7 +1136,7 @@ public final class ArgumentValidations {
   public static void isBetween(
       BigDecimal value, BigDecimal startValue, BigDecimal endValue, ValidationMessage message) {
     if (!(value.compareTo(startValue) >= 0 && value.compareTo(endValue) <= 0)) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value, startValue, endValue);
     }
   }
 
@@ -1173,7 +1173,7 @@ public final class ArgumentValidations {
    */
   public static void matchesPattern(CharSequence value, String pattern, ValidationMessage message) {
     if (!Pattern.matches(pattern, value)) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value);
     }
   }
 
@@ -1188,7 +1188,7 @@ public final class ArgumentValidations {
   public static <T> void contains(
       T value, Collection<? extends T> collection, ValidationMessage message) {
     if (!collection.contains(value)) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value);
     }
   }
 
@@ -1203,7 +1203,7 @@ public final class ArgumentValidations {
   public static <T> void doesNotContain(
       T value, Collection<? extends T> collection, ValidationMessage message) {
     if (collection.contains(value)) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value);
     }
   }
 
@@ -1216,7 +1216,7 @@ public final class ArgumentValidations {
    */
   public static void hasSize(CharSequence value, int size, ValidationMessage message) {
     if (value.length() != size) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value, size);
     }
   }
 
@@ -1231,7 +1231,7 @@ public final class ArgumentValidations {
    */
   public static <K, V> void hasSize(Map<K, V> value, int size, ValidationMessage message) {
     if (value.size() != size) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, size);
     }
   }
 
@@ -1245,7 +1245,7 @@ public final class ArgumentValidations {
    */
   public static <T> void hasSize(Collection<T> value, int size, ValidationMessage message) {
     if (value.size() != size) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, size);
     }
   }
 
@@ -1260,7 +1260,7 @@ public final class ArgumentValidations {
   public static void hasSizeBetween(
       CharSequence value, int minSize, int maxSize, ValidationMessage message) {
     if (value.length() < minSize || value.length() > maxSize) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value, minSize, maxSize);
     }
   }
 
@@ -1277,7 +1277,7 @@ public final class ArgumentValidations {
   public static <K, V> void hasSizeBetween(
       Map<K, V> value, int minSize, int maxSize, ValidationMessage message) {
     if (value.size() < minSize || value.size() > maxSize) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, minSize, maxSize);
     }
   }
 
@@ -1293,7 +1293,7 @@ public final class ArgumentValidations {
   public static <T> void hasSizeBetween(
       Collection<T> value, int minSize, int maxSize, ValidationMessage message) {
     if (value.size() < minSize || value.size() > maxSize) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, minSize, maxSize);
     }
   }
 
@@ -1307,7 +1307,7 @@ public final class ArgumentValidations {
    */
   public static <T> void isInstanceOf(T value, Class<?> type, ValidationMessage message) {
     if (!type.isInstance(value)) {
-      throw new InvalidArgumentException(message);
+      throw new InvalidArgumentException(message, value, type);
     }
   }
 

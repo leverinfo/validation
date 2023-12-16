@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.0
+
+### Improvements
+
+* Pass values obteined in arguments validations for exception parameters in some argument validations
+
 ## 0.3.2
 
 ### Improvements
@@ -27,7 +33,7 @@
 
 ### Improvements
 
-* Added some custom exceptions
+* Add some custom exceptions
 
 ## 0.1.1
 
